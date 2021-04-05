@@ -1,25 +1,19 @@
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.master("local")
-.appName("Movie Ratings") 
-.getOrCreate()
 
-movie_frame = spark.read.format("csv")
-.option("header", "true") 
-.option("mode", "DROPMALFORMED")
-.load("ml-latest-small/movies.csv")
+def build_session():
+    spark = SparkSession.builder.master("local").appName("Movie Ratings").getOrCreate()
 
-ratings_frame = spark.read.format("csv")
-.option("header", "true")
-.option("mode", "DROPMALFORMED")
-.load("ml-latest-small/ratings.csv")
+    spark.movie_frame = spark.read.format("csv").option("header", "true")\
+        .option("mode", "DROPMALFORMED").load("ml-latest-small/movies.csv")
 
-links_frame = spark.read.format("csv")
-.option("header", "true") 
-.option("mode", "DROPMALFORMED")
-.load("ml-latest-small/links.csv")
+    spark.ratings_frame = spark.read.format("csv").option("header", "true")\
+        .option("mode", "DROPMALFORMED").load("ml-latest-small/ratings.csv")
 
-tags_frame = spark.read.format("csv")
-.option("header", "true")
-.option("mode", "DROPMALFORMED")
-.load("ml-latest-small/tags.csv")
+    spark.links_frame = spark.read.format("csv").option("header", "true")\
+        .option("mode", "DROPMALFORMED").load("ml-latest-small/links.csv")
+
+    spark.tags_frame = spark.read.format("csv").option("header", "true")\
+        .option("mode", "DROPMALFORMED").load("ml-latest-small/tags.csv")
+
+    return spark
