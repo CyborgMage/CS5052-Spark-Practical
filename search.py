@@ -1,7 +1,6 @@
 import sys
 import main
-from pyspark.sql.functions import countDistinct, sum, col, coalesce
-
+from pyspark.sql.functions import countDistinct, sum, col
 
 #Note: correcting user input is out of scope for this implementation.
 #More elegant error handling warranted?
@@ -71,7 +70,7 @@ if len(sys.argv) >= 3:
     spark = main.build_session()
     keepColumns = switch_searchOption[searchOption]
     search = switch_searchOption.get(searchOption, lambda: "Invalid search option")
-    search.write.csv("searchresult.csv")
+    search(searchKey).write.format("csv").mode("overwrite").save("searchresult.csv")
     print("Output saved to csv")
 else:
     quit(1)

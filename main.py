@@ -1,6 +1,5 @@
 from pyspark.sql import SparkSession
 
-
 def build_session():
     spark = SparkSession.builder.master("local").appName("Movie Ratings").getOrCreate()
 
