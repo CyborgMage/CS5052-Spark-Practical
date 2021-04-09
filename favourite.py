@@ -35,7 +35,7 @@ def favourite_movies(user_ids):
 
     return top_genre
 
-if len(sys.argv) >= 1:
+if len(sys.argv) >= 2:
     fav_users = sys.argv[1:]
     spark = main.build_session()
     top_genres = favourite_movies(fav_users)
