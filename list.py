@@ -33,6 +33,6 @@ if len(sys.argv) >= 3:
     search = switch_listOption.get(listOption, lambda: "Invalid list option")
     result = search(n)
     print(result)
-    result.repartition(1).write.csv("results.csv")
+    result.repartition(1).write.csv("results.csv", header = "true")
 else: 
     quit(1)
