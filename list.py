@@ -13,8 +13,9 @@ def list_top_movies(n):
 def list_top_watches(n):
     ratings = spark.ratings_frame
     movies = spark.movie_frame
-    movie_watches = ratings.groupBy('movieId').count().orderBy(desc('count')).limit(n)
-    watches_names = movie_watches.join(movies, movie_watches.movieId == movies.movieId).select("movieId", "count")
+    movie_watches = ratings.groupBy('movieId').count().orderBy(desc('count'))
+    movie_watches = movie_watches.limit(int(n))
+    watches_names = movie_watches.join(movies, on =['movieId'], how='inner').sort(desc("count")).select("title", "count")
     
     return (watches_names)
 
@@ -30,6 +31,8 @@ if len(sys.argv) >= 2:
     spark = main.build_session()
     keepColumns = switch_listOption[listOption]
     search = switch_listOption.get(listOption, lambda: "Invalid list option")
-    print(search(n))
+    result = search(n)
+    print(result)
+    result.repartition(1).write.csv("results.csv")
 else: 
     quit(1)
