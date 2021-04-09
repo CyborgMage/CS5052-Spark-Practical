@@ -24,7 +24,15 @@ def favourite_movies(user_ids):
 
     for genre in genre_dict:
         if genre_dict.get(genre) > top_Watches:
-            
+            top_genre.clear()
+            top_genre.append(genre)
+            top_Watches = genre_dict.get(genre)
+        elif genre_dict.get(genre) == top_Watches:
+            top_genre.append(genre)
+        else:
+            continue
+
+    return top_genre
 
 
 
@@ -32,6 +40,9 @@ def favourite_movies(user_ids):
 if len(sys.argv >= 1):
     fav_users = sys.argv[0:]
     spark = main.build_session()
-    print(favourite_movies(fav_users))
+    top_genres = favourite_movies(fav_users)
+    print("The favourite genre(s) for that user/group of users is:")
+    for genre in top_genres:
+        print(genre + "\n")
 else: 
     quit(1)
