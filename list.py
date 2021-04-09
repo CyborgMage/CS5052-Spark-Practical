@@ -5,18 +5,18 @@ from pyspark.sql.functions import *
 def list_top_movies(n):
     ratings = spark.ratings_frame
     movies = spark.movie_frame
-    movie_rankings = ratings.join(movies, ratings.movieId == movies.movieId).groupBy(movies.movieId)\
-    .agg(avg("rating").alias("average_rating")).orderBy(desc("average_rating")).select("movieId", "average_rating")
+    movie_rankings = ratings.groupBy("movieId").agg(avg("rating").alias("average")).orderBy(desc("average")).limit(n)
+    rankings_names = movie_rankings.join(movies, movie_rankings.movieId == movies.movieId).select("movieId", "average")
     
-    return (movie_rankings.take(n))
+    return (rankings_names)
 
 def list_top_watches(n):
-    links = spark.links_frame
+    ratings = spark.ratings_frame
     movies = spark.movie_frame
-    movie_watches = links.join(movies, links.movieId == movies.movieId).groupBy(movies.movieId)\
-    .agg(count("movieId").alias("count")).orderBy(desc("count")).select("movieId", "count")
+    movie_watches = ratings.groupBy('movieId').count().orderBy(desc('count')).limit(n)
+    watches_names = movie_watches.join(movies, movie_watches.movieId == movies.movieId).select("movieId", "count")
     
-    return (movie_watches.take(n))
+    return (watches_names)
 
 switch_listOption = {
     "top_movies_list": list_top_movies,
@@ -31,6 +31,5 @@ if len(sys.argv >= 2):
     keepColumns = switch_listOption[listOption]
     search = switch_listOption.get(listOption, lambda: "Invalid list option")
     print(search(n))
-
 else: 
     quit(1)
