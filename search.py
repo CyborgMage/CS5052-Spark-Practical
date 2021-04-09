@@ -15,7 +15,7 @@ def search_by_userid(search_id):
 
 
 def search_by_movieid(search_id):
-    result_movies = spark.ratings_frame.filter(spark.ratings_frame.movieId + search_id)
+    result_movies = spark.ratings_frame.filter(spark.ratings_frame.movieId == search_id)
     view_count = result_movies.count()
     average_rating = result_movies.agg(sum("rating")).collect()[0][0] / view_count
     print("Movie {0} has an average rating of {1} across {2} viewers.".format(str(search_id), str(average_rating),
@@ -74,7 +74,7 @@ if len(sys.argv) >= 3:
     spark = main.build_session()
     keepColumns = switch_searchOption[searchOption]
     search = switch_searchOption.get(searchOption, lambda: "Invalid search option")
-    search(searchKey).write.format("csv").mode("overwrite").save("searchresult.csv")
+    search(searchKey).write.format("csv").mode("overwrite").save("searchresult.csv", header="true")
     print("Output saved to csv")
 else:
     quit(1)
