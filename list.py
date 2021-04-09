@@ -23,7 +23,7 @@ switch_listOption = {
     "top_watched_list": list_top_watches,
 }
 
-if len(sys.argv >= 2):
+if len(sys.argv) >= 2:
     listOption = sys.argv[1]
     n = sys.argv[2]
 
