@@ -5,8 +5,8 @@ from pyspark.sql.functions import *
 def list_top_movies(n):
     ratings = spark.ratings_frame
     movies = spark.movie_frame
-    movie_rankings = ratings.groupBy("movieId").agg(avg("rating").alias("average")).orderBy(desc("average")).limit(n)
-    rankings_names = movie_rankings.join(movies, movie_rankings.movieId == movies.movieId).select("movieId", "average")
+    movie_rankings = ratings.groupBy("movieId").agg(avg("rating").alias("average")).orderBy(desc("average")).limit(int(n))
+    rankings_names = movie_rankings.join(movies, on =['movieId'], how='inner').sort(desc("average")).select("title", "average")
     
     return (rankings_names)
 
