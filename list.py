@@ -24,8 +24,8 @@ switch_listOption = {
 }
 
 if len(sys.argv >= 2):
-    listOption = sys.argv[1]
-    n = sys.argv[2]
+    listOption = sys.argv[0]
+    n = sys.argv[1]
 
     spark = main.build_session()
     keepColumns = switch_listOption[listOption]
