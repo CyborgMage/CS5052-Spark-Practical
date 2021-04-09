@@ -13,6 +13,6 @@ if len(sys.argv) >= 3:
     results.repartition(1).write.format("csv").mode("overwrite").save("moviecolumns.csv", header="true")
     # two main metrics; compare ratings for similar movies and compare amount of moves watched by one user but not the other
     results_rowmatrix = RowMatrix(results.drop("movieId").rdd.map(list))
-    results_comparison = results_rowmatrix.columnSimilarities()
+    print("Degree of error in similarity of movie tastes: {0}".format(str(results_rowmatrix.columnSimilarities())))
 else:
     quit(1)
