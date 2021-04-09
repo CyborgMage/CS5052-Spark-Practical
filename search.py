@@ -32,6 +32,9 @@ def search_by_genre(search_id):
     result_movies = spark.movie_frame.filter(col("genres").contains(search_id))
     return result_movies
 
+def search_by_year(search_id):
+    result_movies = spark.movie_frame.filter(col("titles").contains(search_id))
+    return result_movies
 
 def search_by_useridlist(search_ids):
     movie_ids = spark.ratings_frame.filter(col("userId").isin(search_ids))
@@ -55,6 +58,7 @@ switch_searchOption = {
     "movieId": search_by_movieid,
     "title": search_by_title,
     "genre": search_by_genre,
+    "year": search_by_year,
     "userIdList" : search_by_useridlist,
     "genreList" :search_by_genrelist
     # Movie titles include year, so base title searching may already cover searching movies by year?
